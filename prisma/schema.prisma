@@ -1,0 +1,132 @@
+// PostgreSQL'e geçiş için provider = "postgresql" ve url güncellenmesi yeterlidir.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  STUDENT
+  CLUB_PRESIDENT
+  ADMIN
+}
+
+enum EntityStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum EventStatus {
+  ACTIVE
+  CANCELLED
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  CANCELLED
+}
+
+model User {
+  id           String       @id @default(cuid())
+  name         String
+  email        String       @unique
+  passwordHash String
+  role         UserRole
+  status       EntityStatus @default(ACTIVE)
+  createdAt    DateTime     @default(now())
+
+  student       Student?
+  notifications Notification[]
+  presidentClub Club?          @relation("ClubPresident")
+}
+
+model Student {
+  id         String @id @default(cuid())
+  userId     String @unique
+  studentNo  String @unique
+  department String
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  enrollments Enrollment[]
+  favorites   Favorite[]
+}
+
+model Club {
+  id              String       @id @default(cuid())
+  name            String
+  description     String
+  presidentUserId String       @unique
+  status          EntityStatus @default(ACTIVE)
+
+  president     User           @relation("ClubPresident", fields: [presidentUserId], references: [id])
+  events        Event[]
+  announcements Announcement[]
+}
+
+model Event {
+  id          String      @id @default(cuid())
+  clubId      String
+  title       String
+  description String
+  location    String
+  category    String      @default("Genel")
+  coverKey    String      @default("aurora")
+  startTime   DateTime
+  quota       Int
+  status      EventStatus @default(ACTIVE)
+  createdAt   DateTime    @default(now())
+
+  club        Club         @relation(fields: [clubId], references: [id])
+  enrollments Enrollment[]
+  favorites   Favorite[]
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  studentId String
+  eventId   String
+  createdAt DateTime @default(now())
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  event   Event   @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, eventId])
+}
+
+model Enrollment {
+  id        String           @id @default(cuid())
+  eventId   String
+  studentId String
+  status    EnrollmentStatus @default(ACTIVE)
+  createdAt DateTime         @default(now())
+
+  event   Event   @relation(fields: [eventId], references: [id])
+  student Student @relation(fields: [studentId], references: [id])
+
+  @@unique([eventId, studentId])
+}
+
+model Announcement {
+  id        String       @id @default(cuid())
+  clubId    String
+  title     String
+  content   String
+  status    EntityStatus @default(ACTIVE)
+  createdAt DateTime     @default(now())
+
+  club Club @relation(fields: [clubId], references: [id])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
