@@ -1,15 +1,4 @@
-# README Dosyasının Amacı ve Önemi
 
-**README Dosyasının Amacı:**
-Bir README dosyası, bir yazılım projesinin "vitrini" ve kullanım kılavuzudur. Projeyi ziyaret eden veya kullanmak isteyen kişilere projenin ne olduğunu, ne işe yaradığını, nasıl kurulup çalıştırılacağını ve projeye nasıl katkıda bulunulabileceğini açıklayan temel belgedir.
-
-**Yazılım Projelerinde Neden Önemlidir?**
-- **İlk İzlenim:** Projeyi inceleyen diğer geliştiricilerin veya kullanıcıların projeyi hızlıca anlamasını sağlar.
-- **Zaman Tasarrufu:** Kurulum ve kullanım adımlarını netleştirerek, projeyi kullanacak kişilerin karşılaştığı sorunları en aza indirir.
-- **İletişim ve İşbirliği:** Açık kaynaklı veya takım projelerinde, projeye dahil olacak yeni geliştiriciler için rehber niteliği taşır, projeye adaptasyon sürecini hızlandırır.
-- **Dokümantasyon Başlangıcı:** Proje hakkında detaylı teknik bilgilerin ve mimarinin temel özetini sunar.
-
----
 
 # Yazılım Mühendisliği Üniversite Kulüp Etkinlik Yönetim Sistemi
 
